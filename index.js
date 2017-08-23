@@ -186,8 +186,14 @@ module.exports = {
             Namespace: o.namespace,
             OptionName: o.optionName,
             Value: o.value
+          }))).concat(Object.keys(this.readConfig('environmentVariables')).map( k => ({
+            Namespace: "aws:elasticbeanstalk:application:environment",
+            OptionName: k,
+            Value: this.readConfig('environmentVariables')[k]
           })))
         };
+
+        this.log(`Params: ${JSON.stringify(params)}`, {verbose: true});
 
         await this._applicationVersionIsReady(params);
 
